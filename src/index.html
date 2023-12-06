@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Yandex Maps API</title>
+    <script src="https://api-maps.yandex.ru/v3/?apikey=3d266cc2-e502-482c-b963-802c08869079&lang=ru_RU"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
+    <style>
+        #map {
+            margin: auto;
+            width: 600px;
+            height: 400px;
+        }
+        #input-group {
+            margin: auto;
+            margin-top: 20px;
+            width: 600px;
+        }
+
+        input {
+          width: 290px;
+          border: 2px solid gray;
+          border-radius: 5px;
+          font-size: 12px;
+        }
+
+        .danger {
+          border-color: red;
+          color: red;
+          position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="input-group">
+      <input type="text" id="radius" placeholder="Радиус в километрах. По умолчанию: 1">
+      <input type="text" id="direction" placeholder="Направление в градусах. По умолчанию: случайное">
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

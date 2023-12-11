@@ -22,10 +22,10 @@ async function initMap() {
     {
       location: {
         // Координаты центра карты
-        center: [37.588144, 55.733842],
+        center: [40.327424, 62.765573],
 
         // Уровень масштабирования
-        zoom: 10,
+        zoom: 14,
       },
     },
   );
@@ -50,12 +50,12 @@ async function initMap() {
 
   const clickHandler = async (object, e) => {
     const coords = e.coordinates;
+    console.log(coords);
     const response = await axios.post('http://localhost:4000/getCars', {
       coords,
-      radius: setting.radius,
+      radius: setting.radius === 0 ? 1 : setting.radius,
       direction: setting.direction,
     })
-    
   };
 
   // Добавляем слой для отображения схематической карты

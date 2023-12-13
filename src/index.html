@@ -13,11 +13,11 @@
         #input-group {
             margin: auto;
             margin-top: 20px;
-            width: 600px;
+            width: 596px;
         }
 
         input {
-          width: 290px;
+          width: 100%;
           border: 2px solid gray;
           border-radius: 5px;
           font-size: 12px;
@@ -28,13 +28,22 @@
           color: red;
           position: relative;
         }
+        .marker {
+          height: 10px;
+        }
+
+        .point {
+          height: 5px;
+          width: 5px;
+          background-color: blue;
+        }
     </style>
 </head>
 <body>
-    <div id="map"></div>
+    <div id="map">
+    </div>
     <div id="input-group">
-      <input type="text" id="radius" placeholder="Радиус в километрах. По умолчанию: 1">
-      <input type="text" id="direction" placeholder="Направление в градусах. По умолчанию: случайное">
+      <input type="text" id="radius" placeholder="Радиус в метрах. По умолчанию: 1000">
     </div>
     <script src="index.js"></script>
 </body>

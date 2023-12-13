@@ -9,10 +9,14 @@ async function initMap() {
     YMapDefaultSchemeLayer,
     YMapListener,
     YMapControls,
-    YMapGeolocationControlI,
-    YMapZoomControlI,
+    YMapMarker,
+    YMapDefaultFeaturesLayer,
+    YMapCollection,
+    YMapLayer,
+    YMapFeatureDataSource,
   } = ymaps3;
 
+  const { YMapZoomControl } = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
   // Иницилиазируем карту
   const map = new YMap(
     // Передаём ссылку на HTMLElement контейнера
@@ -22,7 +26,7 @@ async function initMap() {
     {
       location: {
         // Координаты центра карты
-        center: [40.327424, 62.765573],
+        center: [53.803687, 56.461218],
 
         // Уровень масштабирования
         zoom: 14,
@@ -30,36 +34,56 @@ async function initMap() {
     },
   );
 
-  const setting = { radius: 0, direction: 0 };
+  // Добавляем слой для отображения схематической карты
+  map.addChild(new YMapDefaultSchemeLayer());
+  map.addChild(new YMapDefaultFeaturesLayer());
+
+  let radius = 1000;
+  let collection = new YMapCollection();
 
   const inputHandler = (e) => {
     const value = Number(e.target.value);
     if (isNaN(value)) {
       e.target.classList.add('danger');
-      setting[e.target.id] = 0;
+      radius = 1000;
     } else {
       e.target.classList.remove('danger');
-      setting[e.target.id] = value;
+      radius = value;
     }
   };
+
+  const clickHandler = async (object, e) => {
+    map.removeChild(collection);
+    const coords = e.coordinates;
+    const response = await axios.post('http://localhost:4000/getCars', {
+      coords,
+      radius,
+    });
+    collection = new YMapCollection();
+    response.data.map((point) => {
+      const markerElement = document.createElement('img');
+      markerElement.className = 'marker';
+      markerElement.src='./icons/car.png'
+      markerElement.style.transform = `rotate(${point.direction}deg)`
+      const marker = new YMapMarker(
+        {
+          coordinates: point.coords,
+          draggable: true,
+          mapFollowsOnDrag: true,
+        },
+        markerElement,
+      );
+      console.log(point.coords)
+      collection.addChild(marker);
+    })
+    map.addChild(collection);
+  };
+
   const radiusInput = document.getElementById('radius');
   radiusInput.addEventListener('input', inputHandler);
 
-  const directionInput = document.getElementById('direction');
-  directionInput.addEventListener('input', inputHandler);
-
-  const clickHandler = async (object, e) => {
-    const coords = e.coordinates;
-    console.log(coords);
-    const response = await axios.post('http://localhost:4000/getCars', {
-      coords,
-      radius: setting.radius === 0 ? 1 : setting.radius,
-      direction: setting.direction,
-    })
-  };
-
-  // Добавляем слой для отображения схематической карты
-  map.addChild(new YMapDefaultSchemeLayer());
+  const controls = new YMapControls({ position: 'right' });
+  const zoomControl = new YMapZoomControl();
 
   const mapListener = new YMapListener({
     layer: 'any',
@@ -67,10 +91,6 @@ async function initMap() {
   });
 
   map.addChild(mapListener);
-
-  const controls = new YMapControls({ position: 'right' });
-  const { YMapZoomControl } = await ymaps3.import('@yandex/ymaps3-controls@0.0.1');
-  const zoomControl = new YMapZoomControl();
   controls.addChild(zoomControl);
   map.addChild(controls);
 }

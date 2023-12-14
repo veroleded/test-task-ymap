@@ -7,7 +7,6 @@ export default async (point, radius = 1000) => {
   const overpassQuery = `
     [out:json];
     (
-      way["highway"](around:${radius},${point[1]},${point[0]});
       way["highway"~"motorway|trunk|primary|secondary|tertiary|unclassified|residential|living_street|service|track|path|cycleway|footway|bridleway|steps|pedestrian|corridor|platform|raceway"](around:${radius},${point[1]},${point[0]});
     );
     out body;
@@ -24,7 +23,7 @@ export default async (point, radius = 1000) => {
     const hasName = street.tags.name
     const isForCar = footWays.every((way) => way !== street.tags.highway);
 
-    return isForCar && hasName;
+    return isForCar;
   });
 
   const randomStreets = randomItengers(0, filterStreet.length - 1, 5).map((num) => filterStreet[num]);

@@ -29,7 +29,7 @@ async function initMap() {
         center: [53.803687, 56.461218],
 
         // Уровень масштабирования
-        zoom: 14,
+        zoom: 20,
       },
     },
   );
@@ -63,19 +63,32 @@ async function initMap() {
     response.data.map((point) => {
       const markerElement = document.createElement('img');
       markerElement.className = 'marker';
-      markerElement.src='./icons/car.png'
-      markerElement.style.transform = `rotate(${point.direction}deg)`
+      markerElement.src = './icons/car.png';
+      markerElement.style.transform = `rotate(${Math.round(point.direction)}deg)`;
       const marker = new YMapMarker(
         {
           coordinates: point.coords,
-          draggable: true,
-          mapFollowsOnDrag: true,
+          // draggable: true,
+          // mapFollowsOnDrag: true,
         },
         markerElement,
       );
-      console.log(point.coords)
+      point.line.geometry.coordinates.map((coord) => {
+        const markerElementLine = document.createElement('img');
+        markerElementLine.className = 'point';
+        // markerElementLine.src = './icons/car.png';
+        // markerElementLine.style.transform = `rotate(${point.direction}deg)`
+        const markerLine = new YMapMarker(
+          {
+            coordinates: [coord[1], coord[0]],
+          },
+          markerElementLine,
+        );
+        collection.addChild(markerLine);
+      });
+
       collection.addChild(marker);
-    })
+    });
     map.addChild(collection);
   };
 

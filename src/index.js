@@ -29,7 +29,7 @@ async function initMap() {
         center: [53.803687, 56.461218],
 
         // Уровень масштабирования
-        zoom: 20,
+        zoom: 14,
       },
     },
   );
@@ -73,19 +73,19 @@ async function initMap() {
         },
         markerElement,
       );
-      point.line.geometry.coordinates.map((coord) => {
-        const markerElementLine = document.createElement('img');
-        markerElementLine.className = 'point';
-        // markerElementLine.src = './icons/car.png';
-        // markerElementLine.style.transform = `rotate(${point.direction}deg)`
-        const markerLine = new YMapMarker(
-          {
-            coordinates: [coord[1], coord[0]],
-          },
-          markerElementLine,
-        );
-        collection.addChild(markerLine);
-      });
+      // point.line.geometry.coordinates.map((coord) => {
+      //   const markerElementLine = document.createElement('img');
+      //   markerElementLine.className = 'point';
+      //   // markerElementLine.src = './icons/car.png';
+      //   // markerElementLine.style.transform = `rotate(${point.direction}deg)`
+      //   const markerLine = new YMapMarker(
+      //     {
+      //       coordinates: [coord[1], coord[0]],
+      //     },
+      //     markerElementLine,
+      //   );
+      //   collection.addChild(markerLine);
+      // });
 
       collection.addChild(marker);
     });
